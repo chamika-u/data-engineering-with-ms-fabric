@@ -1,118 +1,134 @@
-# 1.1 Create and use Dataflows (Gen2) in Microsoft Fabric
+# Dataflow Gen2 ingestion walkthrough
 
-**Module:** Ingest Data with Microsoft Fabric  
-**Estimated Time:** 30 minutes  
-**Goal:** Create a Fabric workspace, create a Lakehouse, configure a Dataflow Gen2 to load CSV data, route it to a Lakehouse destination, and execute it from a Data Pipeline.
+This exercise documents how I built a simple ingestion flow in Microsoft Fabric using a dataflow and a pipeline. The goal was to bring a CSV file into a Lakehouse and confirm the data was loaded correctly.
 
 ---
 
-## Lab reference
+## Learning objective
 
-- [mslearn-fabric home](https://microsoftlearning.github.io/mslearn-fabric)
-- [Create a workspace](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html#create-a-workspace)
-- [Create a lakehouse](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html#create-a-lakehouse)
-- [Create a Dataflow (Gen2) to ingest data](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html#create-a-dataflow-gen2-to-ingest-data)
-- [Add data destination for Dataflow](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html#add-data-destination-for-dataflow)
-- [Add a dataflow to a pipeline](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html#add-a-dataflow-to-a-pipeline)
-- [Clean up resources](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html#clean-up-resources)
+I used a Fabric workspace, created a Lakehouse, and then built a Dataflow Gen2 to pull data from a public CSV file, transform it, and load it into the Lakehouse. After that, I added the dataflow into a Data Pipeline and ran it to validate the end-to-end process.
 
 ---
 
-## Overview
+## Reference material
 
-This lab demonstrates how to create a Dataflow (Gen2) in Microsoft Fabric to ingest data from a CSV file, transform it in Power Query, and load it into a Lakehouse. I then added the dataflow into a Data Pipeline to orchestrate the ingestion process and verified the resulting table in the Lakehouse.
-
----
-
-## My implementation: 15-step walkthrough
-
-### 1) Open Microsoft Fabric and navigate to the home page
-
-![Step 1](./screenshots/1.png)
-
-### 2) Open the workspaces view
-
-![Step 2](./screenshots/2.png)
-
-### 3) Create a new Fabric workspace
-
-![Step 3](./screenshots/3.png)
-
-### 4) Name the workspace and choose a Fabric-capable license mode
-
-![Step 4](./screenshots/4.png)
-
-### 5) Create a Lakehouse inside the workspace
-
-![Step 5](./screenshots/5.png)
-
-### 6) Open the new Lakehouse and create a Dataflow Gen2
-
-![Step 6](./screenshots/6.png)
-
-### 7) Select the CSV source and configure the file URL
-
-![Step 7](./screenshots/7.png)
-
-### 8) Preview the CSV data in Power Query
-
-![Step 8](./screenshots/8.png)
-
-### 9) Add a custom column for MonthNo using `Date.Month([OrderDate])`
-
-![Step 9](./screenshots/9.png)
-
-### 10) Confirm the transformation and applied query steps
-
-![Step 10](./screenshots/10.png)
-
-### 11) Configure the Lakehouse as the data destination
-
-![Step 11](./screenshots/11.png)
-
-### 12) Select the Lakehouse and table name `orders`
-
-![Step 12](./screenshots/12.png)
-
-### 13) Set destination settings to append and save the dataflow
-
-![Step 13](./screenshots/13.png)
-
-### 14) Save and run the Dataflow, then create a Data Pipeline to trigger it
-
-![Step 14](./screenshots/14.png)
-
-### 15) Verify the pipeline success and inspect the loaded `orders` table in the Lakehouse
-
-![Step 15](./screenshots/15.png)
+- [mslearn-fabric](https://microsoftlearning.github.io/mslearn-fabric)
+- [Dataflow Gen2 lab](https://microsoftlearning.github.io/mslearn-fabric/Instructions/Labs/05-dataflows-gen2.html)
 
 ---
 
-## What I learned
+## How I did it
 
-- Dataflows (Gen2) are ideal for low-code ETL processes in Microsoft Fabric.
-- Power Query Online makes it easy to cleanse and transform raw files before loading them.
-- Lakehouse destinations support direct analytical loading into a table-based structure.
-- Data Pipelines can orchestrate dataflow execution and make ingestion repeatable and operationalized.
-- The final `orders` table is a clean, usable analytical dataset ready for downstream reporting and transformation.
+### 1. Started with a Fabric workspace
+
+I opened the Microsoft Fabric portal and created a workspace with a supported capacity so the lab environment could run properly.
+
+![Screenshot](./screenshots/1.png)
+
+### 2. Created the project workspace
+
+I set up the workspace and prepared the environment where the Lakehouse and dataflow would live.
+
+![Screenshot](./screenshots/2.png)
+
+### 3. Created a new Lakehouse
+
+From the workspace, I created a Lakehouse to act as the destination for the ingested data.
+
+![Screenshot](./screenshots/3.png)
+
+### 4. Opened the Lakehouse and created the dataflow
+
+I went into the Lakehouse and started a new Dataflow Gen2 so I could connect to the source file and begin the ETL process.
+
+![Screenshot](./screenshots/4.png)
+
+### 5. Connected to the CSV file
+
+I selected the CSV source and used the public GitHub file URL for the sample dataset. The connection was created as an anonymous source so Power Query could read the data.
+
+![Screenshot](./screenshots/5.png)
+
+### 6. Reviewed the raw dataset in Power Query
+
+I previewed the file and checked that the columns and values looked correct before making any transformations.
+
+![Screenshot](./screenshots/6.png)
+
+### 7. Added a transformation step
+
+I added a custom column to calculate the month number from the order date. This helped create a new analytical field for later use.
+
+![Screenshot](./screenshots/7.png)
+
+### 8. Verified the transformation result
+
+I checked the output of the new column and confirmed the data was being transformed as expected inside the Power Query editor.
+
+![Screenshot](./screenshots/8.png)
+
+### 9. Confirmed the query logic
+
+I reviewed the applied steps and ensured the custom logic was included in the transformation sequence.
+
+![Screenshot](./screenshots/9.png)
+
+### 10. Set the Lakehouse as the destination
+
+I configured the data destination so the transformed output would load into the Lakehouse table instead of staying in a temporary query.
+
+![Screenshot](./screenshots/10.png)
+
+### 11. Selected the target Lakehouse and table name
+
+I defined the target workspace and Lakehouse and named the resulting table `orders`.
+
+![Screenshot](./screenshots/11.png)
+
+### 12. Applied the destination settings
+
+I saved the destination configuration and selected the append option so new rows could be written into the target table.
+
+![Screenshot](./screenshots/12.png)
+
+### 13. Saved and ran the dataflow
+
+I saved the configuration and executed the dataflow so the transformation and loading process could run successfully.
+
+![Screenshot](./screenshots/13.png)
+
+### 14. Added the dataflow to a pipeline
+
+I created a data pipeline, added a Dataflow activity, and connected it to the dataflow I had just built so the ingestion process could be orchestrated.
+
+![Screenshot](./screenshots/14.png)
+
+### 15. Ran the pipeline and validated the result
+
+I executed the pipeline and checked the Lakehouse tables to confirm that the `orders` table was created and populated with the expected data.
+
+![Screenshot](./screenshots/15.png)
 
 ---
 
-## Key takeaway
+## Outcome
 
-This exercise showed how a CSV file can be transformed and ingested into a Fabric Lakehouse using a Dataflow Gen2, then executed from a Data Pipeline for repeatable, production-ready ingestion. This is a strong foundation for building scalable data engineering workflows in Microsoft Fabric.
-
----
-
-## Clean up resources
-
-If I no longer need the test environment, I can remove the workspace from the Fabric portal:
-
-1. Open the workspace settings.
-2. Navigate to **General**.
-3. Select **Remove this workspace**.
-4. Confirm deletion.
+The final result was a successful ingestion workflow where a CSV file was imported, transformed, and loaded into the Lakehouse through a Dataflow Gen2 and executed through a Data Pipeline. This was a strong hands-on example of building a simple end-to-end data ingestion process in Microsoft Fabric.
 
 ---
 
-*This README documents my hands-on learning journey in Microsoft Fabric Data Engineering.*
+## Key learning
+
+This exercise helped me understand how low-code ETL in Fabric works in practice:
+
+- source data can be ingested from external files
+- transformations can be built visually in Power Query
+- the Lakehouse acts as the analytical destination
+- Pipelines add orchestration and operational control
+- the loaded table becomes ready for downstream analysis and reporting
+
+---
+
+## Clean-up
+
+Once the exercise was complete, the environment could be cleaned up by deleting the workspace from the Fabric portal if it was no longer needed.
